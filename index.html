@@ -3,159 +3,741 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Kantin</title>
+    <title>Menu Kantin Digital</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .fade-in {
-            animation: fadeIn 1s ease-out;
+        :root {
+            --primary-color: #4facfe;
+            --secondary-color: #00f2fe;
+            --accent-color: #f87171;
+            --dark-color: #1f2937;
+            --light-color: #f3f4f6;
         }
 
         body {
-            background: linear-gradient(to right, #4facfe, #00f2fe);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            min-height: 100vh;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .menu-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .menu-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .filter-buttons {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.5rem;
+            }
+
+            .menu-card {
+                margin: 0.5rem 0;
+            }
+
+            .modal-content {
+                width: 90% !important;
+                margin: 1rem;
+            }
+        }
+
+        /* Desktop Optimizations */
+        @media (min-width: 769px) {
+            .menu-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+
+            .menu-card {
+                margin: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            color: white;
+            opacity: 0;
+            transform: translateY(-100%);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Floating Action Button for Mobile */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        @media (max-width: 768px) {
+            .fab {
+                display: flex;
+            }
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        /* Price Tag Animation */
+        .price-tag {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-tag::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30%;
+            height: 100%;
+            background: linear-gradient(to left, rgba(255, 255, 255, 0.8), transparent);
+            transform: skewX(-20deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) skewX(-20deg); }
+            100% { transform: translateX(200%) skewX(-20deg); }
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Bottom Navigation for Mobile */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 0.5rem;
+            display: none;
+            justify-content: space-around;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+        }
+
+        @media (max-width: 768px) {
+            .bottom-nav {
+                display: flex;
+            }
+
+            main {
+                padding-bottom: 70px;
+            }
+        }
+
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--dark-color);
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+
+        .bottom-nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .bottom-nav-item.active {
+            color: var(--primary-color);
         }
     </style>
 </head>
-<body class="text-gray-800 font-sans">
-    <header class="text-center py-5">
-        <h1 class="text-3xl font-bold text-white">Menu Wayung Penowl</h1>
-        <div class="space-x-2 mt-4">
-            <button class="px-4 py-2 bg-blue-800 hover:bg-blue-900 text-white rounded" onclick="filterMenu('all')">Semua</button>
-            <button class="px-4 py-2 bg-blue-800 hover:bg-blue-900 text-white rounded" onclick="filterMenu('food')">Makanan</button>
-            <button class="px-4 py-2 bg-blue-800 hover:bg-blue-900 text-white rounded" onclick="filterMenu('drinks')">Minuman</button>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-40 glass-effect">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center header-content">
+                <h1 class="text-3xl font-bold text-white flex items-center">
+                    <i class="fas fa-utensils mr-2"></i>
+                    Menu Kantin
+                </h1>
+                <button id="loginBtn" class="hidden md:block px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg shadow-lg transform hover:-translate-y-1 transition-all duration-300">
+                    <i class="fas fa-user-lock mr-2"></i>
+                    Login Admin
+                </button>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-4">
+                <div class="search-container flex-grow relative">
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="search-input" 
+                           placeholder="Cari menu..." 
+                           class="w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300">
+                </div>
+                <div class="filter-buttons flex gap-2">
+                    <button id="btn-all" class="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white rounded-lg transition-all duration-300">
+                        <i class="fas fa-th-list mr-2"></i>
+                        Semua
+                    </button>
+                    <button id="btn-food" class="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white rounded-lg transition-all duration-300">
+                        <i class="fas fa-hamburger mr-2"></i>
+                        Makanan
+                    </button>
+                    <button id="btn-drinks" class="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white rounded-lg transition-all duration-300">
+                        <i class="fas fa-glass-cheers mr-2"></i>
+                        Minuman
+                    </button>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main class="p-5">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 fade-in" id="menu-grid"></div>
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 pt-32 pb-20">
+        <div id="menu-grid" class="grid gap-6"></div>
 
-        <div class="mt-10" id="admin-section" style="display: none;">
-            <h2 class="text-2xl font-bold text-center">Admin Panel</h2>
-            <form id="add-product-form" class="mt-5 space-y-3">
-                <input type="text" id="product-name" placeholder="Nama Produk" class="w-full p-2 border rounded" required>
-                <input type="number" id="product-price" placeholder="Harga Produk (Rp)" class="w-full p-2 border rounded" required>
-                <select id="product-category" class="w-full p-2 border rounded" required>
-                    <option value="">Pilih Kategori</option>
-                    <option value="food">Makanan</option>
-                    <option value="drinks">Minuman</option>
-                </select>
-                <button type="submit" class="w-full px-4 py-2 bg-green-600 text-white rounded">Tambah Produk</button>
-            </form>
-
-            <form id="update-price-form" class="mt-5 space-y-3">
-                <select id="update-product-name" class="w-full p-2 border rounded" required>
-                    <option value="">Pilih Produk</option>
-                </select>
-                <input type="number" id="update-product-price" placeholder="Harga Baru (Rp)" class="w-full p-2 border rounded" required>
-                <button type="submit" class="w-full px-4 py-2 bg-yellow-600 text-white rounded">Ubah Harga</button>
-            </form>
+        <!-- Admin Panel -->
+        <div id="admin-section" class="hidden mt-10 max-w-2xl mx-auto animate-fade-in">
+            <div class="glass-effect rounded-xl p-6">
+                <h2 class="text-2xl font-bold text-white mb-6 text-center">
+                    <i class="fas fa-cog mr-2"></i>
+                    Admin Panel
+                </h2>
+                <div class="space-y-4">
+                    <button id="btn-add" class="w-full px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all duration-300">
+                        <i class="fas fa-plus mr-2"></i>
+                        Tambah Menu
+                    </button>
+                    <button id="btn-update-name" class="w-full px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all duration-300">
+                        <i class="fas fa-edit mr-2"></i>
+                        Ubah Nama Menu
+                    </button>
+                    <button id="btn-update-price" class="w-full px-4 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-all duration-300">
+                        <i class="fas fa-tags mr-2"></i>
+                        Ubah Harga Menu
+                    </button>
+                    <button id="btn-delete" class="w-full px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all duration-300">
+                        <i class="fas fa-trash mr-2"></i>
+                        Hapus Menu
+                    </button>
+                    <button id="btn-reset" class="w-full px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-all duration-300">
+                        <i class="fas fa-undo mr-2"></i>
+                        Reset Menu
+                    </button>
+                </div>
+            </div>
         </div>
     </main>
 
-    <footer class="text-center py-5 bg-gray-800 text-white">
-        <p>Wayung Penowl</p>
-    </footer>
+    <!-- Bottom Navigation for Mobile -->
+    <nav class="bottom-nav">
+        <a href="#" class="bottom-nav-item active" id="nav-menu">
+            <i class="fas fa-utensils"></i>
+            Menu
+        </a>
+        <a href="#" class="bottom-nav-item" id="nav-search">
+            <i class="fas fa-search"></i>
+            Cari
+        </a>
+        <a href="#" class="bottom-nav-item" id="nav-admin">
+            <i class="fas fa-user-lock"></i>
+            Admin
+        </a>
+    </nav>
 
+    <!-- Floating Action Button for Mobile -->
+    <button id="fab-admin" class="fab">
+        <i class="fas fa-user-lock"></i>
+    </button>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="modal-content bg-white rounded-xl p-6 w-11/12 md:w-96 max-h-[90vh] overflow-y-auto">
+            <h3 id="modal-title" class="text-xl font-semibold mb-4"></h3>
+            <div id="modal-content" class="space-y-4"></div>
+            <div class="mt-6 flex justify-end space-x-3">
+                <button id="btn-modal-close" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-all duration-300">
+                    <i class="fas fa-times mr-2"></i>
+                    Tutup
+                </button>
+                <button id="btn-modal-action" class="px-4 py-2 text-white rounded-lg transition-all duration-300"></button>
+            </div>
+        </div>
+    </div>
     <script>
-        const defaultMenu = [
-            { name: 'Mie Rendang', price: 6000, category: 'food' },
-            { name: 'Nasi Goreng', price: 8000, category: 'food' },
-            { name: 'Es Teh Dingin', price: 4000, category: 'drinks' },
-            { name: 'Kopi Hitam', price: 5000, category: 'drinks' },
-        ];
+        document.addEventListener('DOMContentLoaded', () => {
+            let menu = JSON.parse(localStorage.getItem('menu')) || [
+                { id: 1, name: 'Nasi Goreng Spesial', price: 18000, category: 'food', description: 'Nasi goreng dengan telur, ayam, dan sayuran segar pilihan', image: 'nasi-goreng.jpg' },
+                { id: 2, name: 'Mie Goreng', price: 15000, category: 'food', description: 'Mie goreng dengan telur dan sayuran pilihan', image: 'mie-goreng.jpg' },
+                { id: 3, name: 'Es Teh Manis', price: 5000, category: 'drinks', description: 'Teh manis dingin yang menyegarkan', image: 'es-teh.jpg' },
+                { id: 4, name: 'Es Jeruk', price: 6000, category: 'drinks', description: 'Jeruk segar dengan es', image: 'es-jeruk.jpg' }
+            ];
 
-        const menuGrid = document.getElementById('menu-grid');
-        const adminSection = document.getElementById('admin-section');
-        const updateProductSelect = document.getElementById('update-product-name');
+            const menuGrid = document.getElementById('menu-grid');
+            const adminSection = document.getElementById('admin-section');
+            const modal = document.getElementById('modal');
+            const searchInput = document.getElementById('search-input');
+            const loginBtn = document.getElementById('loginBtn');
+            const fabAdmin = document.getElementById('fab-admin');
 
-        // Load menu from localStorage or use default menu
-        let menu = JSON.parse(localStorage.getItem('menu')) || defaultMenu;
+            function showLoading() {
+                document.getElementById('loading-overlay').classList.remove('hidden');
+            }
 
-        function displayMenu(items) {
-            menuGrid.innerHTML = '';
-            // Sort items: food first, then drinks
-            const sortedItems = items.sort((a, b ) => {
-                if (a.category === 'food' && b.category === 'drinks') return -1;
-                if (a.category === 'drinks' && b.category === 'food') return 1;
-                return 0;
-            });
-            sortedItems.forEach(item => {
-                const menuItem = document.createElement('div');
-                menuItem.className = `menu-item ${item.category} bg-white p-4 shadow-lg rounded-lg`;
-                menuItem.innerHTML = `
-                    <h3 class="text-xl font-semibold">${item.name}</h3>
-                    <p class="text-gray-600">Rp${item.price}</p>
+            function hideLoading() {
+                document.getElementById('loading-overlay').classList.add('hidden');
+            }
+
+            function showToast(message, type = 'success') {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = toast ${type === 'success' ? 'bg-green-500' : 'bg-red-500'};
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+
+            function formatPrice(price) {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR'
+                }).format(price);
+            }
+
+            function displayMenu(items) {
+                menuGrid.innerHTML = '';
+
+                const foodItems = items.filter(item => item.category === 'food').sort((a, b) => a.name.localeCompare(b.name));
+                const drinkItems = items.filter(item => item.category === 'drinks').sort((a, b) => a.name.localeCompare(b.name));
+
+                function createCategorySection(title, items) {
+                    if (items.length === 0) return '';
+
+                    return `
+                        <div class="col-span-full animate-fade-in">
+                            <h2 class="text-2xl font-bold text-white mb-4">
+                                <i class="fas fa-${title === 'Makanan' ? 'utensils' : 'glass-martini'} mr-2"></i>
+                                ${title}
+                            </h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                ${items.map(item => `
+                                    <div class="menu-card animate-slide-up">
+                                        <div class="p-4">
+                                            <div class="flex justify-between items-start">
+                                                <div class="flex-grow">
+                                                    <h3 class="text-xl font-semibold">${item.name}</h3>
+                                                    <p class="text-gray-600 price-tag">${formatPrice(item.price)}</p>
+                                                    <p class="text-sm text-gray-500 mt-2">${item.description || ''}</p>
+                                                </div>
+                                                <span class="category-badge px-3 py-1 text-sm rounded-full ${
+                                                    item.category === 'food' 
+                                                    ? 'bg-green-100 text-green-800' 
+                                                    : 'bg-blue-100 text-blue-800'
+                                                }">
+                                                    <i class="fas fa-${item.category === 'food' ? 'utensils' : 'glass-martini'} mr-1"></i>
+                                                    ${item.category === 'food' ? 'Makanan' : 'Minuman'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                menuGrid.innerHTML = `
+                    ${createCategorySection('Makanan', foodItems)}
+                    ${createCategorySection('Minuman', drinkItems)}
+                    ${items.length === 0 ? `
+                        <div class="col-span-full text-center text-white text-xl py-10 animate-fade-in">
+                            <div class="glass-effect rounded-xl p-8">
+                                <i class="fas fa-search mb-4 text-4xl"></i>
+                                <p>Tidak ada menu yang ditemukan</p>
+                            </div>
+                        </div>
+                    ` : ''}
                 `;
-                menuGrid.appendChild(menuItem);
-            });
-        }
+            }
 
-        function filterMenu(category) {
-            if (category === 'all') {
+            function showModal(title, content, actionBtnText, actionBtnColor, actionCallback) {
+                const modalTitle = document.getElementById('modal-title');
+                const modalContent = document.getElementById('modal-content');
+                const modalActionBtn = document.getElementById('btn-modal-action');
+
+                modalTitle.innerHTML = <i class="fas fa-${title.toLowerCase().includes('tambah') ? 'plus' : 'edit'} mr-2"></i>${title};
+                modalContent.innerHTML = content;
+                modalActionBtn.innerHTML = <i class="fas fa-${actionBtnText.toLowerCase().includes('tambah') ? 'plus' : 'check'} mr-2"></i>${actionBtnText};
+                modalActionBtn.className = px-4 py-2 text-white rounded-lg transition-all duration-300 ${actionBtnColor};
+                modalActionBtn.onclick = actionCallback;
+
+                modal.classList.remove('hidden');
+                setTimeout(() => modal.classList.add('show'), 50);
+            }
+
+            function hideModal() {
+                modal.classList.remove('show');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+
+            function addProduct() {
+                const content = `
+                    <div class="space-y-4">
+                        <div class="relative">
+                            <i class="fas fa-font absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" id="new-name" placeholder="Nama Menu" 
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-400">
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-tags absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <input type="number" id="new-price" placeholder="Harga (Rp)" 
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-400">
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-list absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <select id="new-category" 
+                                    class="w-full pl-10 pr-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-400">
+                                <option value="">Pilih Kategori</option>
+                                <option value="food">Makanan</option>
+                                <option value="drinks">Minuman</option>
+                            </select>
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-align-left absolute left-3 top-3 text-gray-400"></i>
+                            <textarea id="new-description" placeholder="Deskripsi Menu" 
+                                    class="w-full pl-10 pr-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-400 min-h-[100px]"></textarea>
+                        </div>
+                    </div>
+                `;
+
+                showModal('Tambah Menu Baru', content, 'Tambah', 'bg-green-500 hover:bg-green-600', () => {
+                    const name = document.getElementById('new-name').value.trim();
+                    const price = parseInt(document.getElementById('new-price').value);
+                    const category = document.getElementById('new-category').value;
+                    const description = document.getElementById('new-description').value.trim();
+
+                    if (name && price > 0 && category) {
+                        const newId = Math.max(...menu.map(item => item.id), 0) + 1;
+                        menu.push({ id: newId, name, price, category, description });
+                        localStorage.setItem('menu', JSON.stringify(menu));
+                        displayMenu(menu);
+                        hideModal();
+                        showToast('Menu berhasil ditambahkan!');
+                    } else {
+                        showToast('Mohon isi semua field yang diperlukan', 'error');
+                    }
+                });
+            }
+
+            function updateProductName() {
+                const productOptions = menu.map(item => 
+                    <option value="${item.id}">${item.name} (${item.category === 'food' ? 'Makanan' : 'Minuman'})</option>
+                ).join('');
+
+                const content = `
+                    <div class="space-y-4">
+                        <div class="relative">
+                            <i class="fas fa-list absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <select id="product-to-rename" 
+                                    class="w-full pl-10 pr-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-400">
+                                <option value="">Pilih Menu</option>
+                                ${productOptions}
+                            </select>
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-font absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" id="new-product-name" placeholder="Nama Baru" 
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-400">
+                        </div>
+                    </div>
+                `;
+
+                showModal('Ubah Nama Menu', content, 'Ubah', 'bg-blue-500 hover:bg-blue-600', () => {
+                    const id = parseInt(document.getElementById('product-to-rename').value);
+                    const newName = document.getElementById('new-product-name').value.trim();
+
+                    if (id && newName) {
+                        const product = menu.find(item => item.id === id);
+                        if (product) {
+                            product.name = newName;
+                            localStorage.setItem('menu', JSON.stringify(menu));
+                            displayMenu(menu);
+                            hideModal();
+                            showToast('Nama menu berhasil diubah!');
+                        }
+                    } else {
+                        showToast('Mohon isi semua field yang diperlukan', 'error');
+                    }
+                });
+            }
+
+            function updateProductPrice() {
+                const productOptions = menu.map(item => 
+                    <option value="${item.id}">${item.name} (${item.category === 'food' ? 'Makanan' : 'Minuman'})</option>
+                ).join('');
+
+                const content = `
+                    <div class="space-y-4">
+                        <div class="relative">
+                            <i class="fas fa-list absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <select id="product-to-reprice" 
+                                    class="w-full pl-10 pr-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-400">
+                                <option value="">Pilih Menu</option>
+                                ${productOptions}
+                            </select>
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-tags absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <input type="number" id="new-product-price" placeholder="Harga Baru (Rp)" 
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-400">
+                        </div>
+                    </div>
+                `;
+
+                showModal('Ubah Harga Menu', content, 'Ubah', 'bg-yellow-500 hover:bg-yellow-600', () => {
+                    const id = parseInt(document.getElementById('product-to-reprice').value);
+                    const newPrice = parseInt(document.getElementById('new-product-price').value);
+
+                    if (id && newPrice > 0) {
+                        const product = menu.find(item => item.id === id);
+                        if (product) {
+                            product.price = newPrice;
+                            localStorage.setItem('menu', JSON.stringify(menu));
+                            displayMenu(menu);
+                            hideModal();
+                            showToast('Harga menu berhasil diubah!');
+                        }
+                    } else {
+                        showToast('Mohon isi semua field yang diperlukan', 'error');
+                    }
+                });
+            }
+
+            function deleteProduct() {
+                const productOptions = menu.map(item => 
+                    <option value="${item.id}">${item.name} (${item.category === 'food' ? 'Makanan' : 'Minuman'})</option>
+                ).join('');
+
+                const content = `
+                    <div class="space-y-4">
+                        <div class="relative">
+                            <i class="fas fa-list absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <select id="product-to-delete" 
+                                    class="w-full pl-10 pr-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-400">
+                                <option value="">Pilih Menu</option>
+                                ${productOptions}
+                            </select>
+                        </div>
+                    </div>
+                `;
+
+                showModal('Hapus Menu', content, 'Hapus', 'bg-red-500 hover:bg-red-600', () => {
+                    const id = parseInt(document.getElementById('product-to-delete').value);
+
+                    if (id) {
+                        menu = menu.filter(item => item.id !== id);
+                        localStorage.setItem('menu', JSON.stringify(menu));
+                        displayMenu(menu);
+                        hideModal();
+                        showToast('Menu berhasil dihapus!');
+                    } else {
+                        showToast('Pilih menu yang akan dihapus', 'error');
+                    }
+                });
+            }
+
+            function resetMenu() {
+                if (confirm('Anda yakin ingin mereset semua menu ke default?')) {
+                    menu = [
+                        { id: 1, name: 'Nasi Goreng Spesial', price: 18000, category: 'food', description: 'Nasi goreng dengan telur, ayam, dan sayuran segar pilihan', image: 'nasi-goreng.jpg' },
+                        { id: 2, name: 'Mie Goreng', price: 15000, category: 'food', description: 'Mie goreng dengan telur dan sayuran pilihan', image: 'mie-goreng.jpg' },
+                        { id: 3, name: 'Es Teh Manis', price: 5000, category: 'drinks', description: 'Teh manis dingin yang menyegarkan', image: 'es-teh.jpg' },
+                        { id: 4, name: 'Es Jeruk', price: 6000, category: 'drinks', description: 'Jeruk segar dengan es', image: 'es-jeruk.jpg' }
+                    ];
+                    localStorage.setItem('menu', JSON.stringify(menu));
+                    displayMenu(menu);
+                    showToast('Menu berhasil direset!');
+                }
+            }
+
+            function authenticateAdmin() {
+                const password = prompt('Masukkan password admin:');
+                if (password === 'penowl08') {
+                    adminSection.classList.remove('hidden');
+                    fabAdmin.classList.add('hidden');
+                    loginBtn.classList.add('hidden');
+                    showToast('Login berhasil!');
+                } else {
+                    showToast('Password salah!', 'error');
+                }
+            }
+
+            // Event Listeners
+            document.getElementById('btn-all').onclick = () => displayMenu(menu);
+            document.getElementById('btn-food').onclick = () => displayMenu(menu.filter(item => item.category === 'food'));
+            document.getElementById('btn-drinks').onclick = () => displayMenu(menu.filter(item => item.category === 'drinks'));
+
+            searchInput.oninput = (e) => {
+                const query = e.target.value.toLowerCase();
+                const filteredMenu = menu.filter(item => 
+                    item.name.toLowerCase().includes(query) ||
+                    item.description?.toLowerCase().includes(query)
+                );
+                displayMenu(filteredMenu);
+            };
+
+            document.getElementById('btn-add').onclick = addProduct;
+            document.getElementById('btn-update-name').onclick = updateProductName;
+            document.getElementById('btn-update-price').onclick = updateProductPrice;
+            document.getElementById('btn-delete').onclick = deleteProduct;
+            document.getElementById('btn-reset').onclick = resetMenu;
+            document.getElementById('btn-modal-close').onclick = hideModal;
+            loginBtn.onclick = authenticateAdmin;
+            fabAdmin.onclick = authenticateAdmin;
+
+            document.getElementById('nav-menu').onclick = (e) => {
+                e.preventDefault();
                 displayMenu(menu);
-            } else {
-                const filtered = menu.filter(item => item.category === category);
-                displayMenu(filtered);
-            }
-        }
+                document.querySelectorAll('.bottom-nav-item').forEach(item => item.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+            };
 
-        function populateUpdateProductSelect() {
-            updateProductSelect.innerHTML = '<option value="">Pilih Produk</option>';
-            menu.forEach(item => {
-                const option = document.createElement('option');
-                option.value = item.name;
-                option.textContent = item.name;
-                updateProductSelect.appendChild(option);
-            });
-        }
+            document.getElementById('nav-search').onclick = (e) => {
+                e.preventDefault();
+                searchInput.focus();
+                document.querySelectorAll('.bottom-nav-item').forEach(item => item.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+            };
 
-        document.getElementById('add-product-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const name = document.getElementById('product-name').value;
-            const price = parseInt(document.getElementById('product-price').value);
-            const category = document.getElementById('product-category').value;
-            menu.push({ name, price, category });
-            localStorage.setItem('menu', JSON.stringify(menu)); // Simpan menu ke localStorage
+            document.getElementById('nav-admin').onclick = (e) => {
+                e.preventDefault();
+                authenticateAdmin();
+            };
+
+            // Initialize
             displayMenu(menu);
-            populateUpdateProductSelect();
-            e.target.reset();
         });
-
-        document.getElementById('update-price-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const name = document.getElementById('update-product-name').value;
-            const newPrice = parseInt(document.getElementById('update-product-price').value);
-            const product = menu.find(item => item.name === name);
-            if (product) product.price = newPrice;
-            localStorage.setItem('menu', JSON.stringify(menu)); // Simpan perubahan ke localStorage
-            displayMenu(menu);
-            e.target.reset();
-        });
-
-        function loginAdmin() {
-            const password = prompt('Masukkan password admin:');
-            if (password === 'penowl08') {
-                adminSection.style.display = 'block';
-                populateUpdateProductSelect();
-            } else {
-                alert('Password salah!');
-            }
-        }
-
-        document.body.onload = function () {
-            displayMenu(menu);
-        };
-
-        // Login button
-        const loginButton = document.createElement('button');
-        loginButton.textContent = 'Login Admin';
-        loginButton.className = 'px-4 py-2 bg-red-600 text-white fixed top-5 right-5 rounded';
-        loginButton.onclick = loginAdmin;
-        document.body.appendChild(loginButton);
     </script>
 </body>
 </html>
