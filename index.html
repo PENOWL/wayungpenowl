@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Wayung Penowl</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Menu Cafe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
     <style>
         :root {
-            --primary: #4facfe;
-            --secondary: #00f2fe;
-            --dark: #2d3436;
-            --light: #ffffff;
-            --gray: #b2bec3;
-            --danger: #ff7675;
-            --success: #00b894;
-            --border-radius: 12px;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --primary-color: #1a237e;
+            --secondary-color: #0d47a1;
+            --accent-color: #1565c0;
+            --text-color: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --item-bg: rgba(255, 255, 255, 0.05);
+            --hover-bg: rgba(255, 255, 255, 0.15);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.2);
+            --gradient-start: #1a237e;
+            --gradient-mid: #0d47a1;
+            --gradient-end: #1565c0;
         }
 
         * {
@@ -30,668 +30,547 @@
         }
 
         body {
-            background: linear-gradient(135deg, #f6f9fc 0%, #ecf0f1 100%);
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
             min-height: 100vh;
-            padding: 20px;
-            color: var(--dark);
+            color: var(--text-color);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background Animation */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(26, 35, 126, 0.8) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(13, 71, 161, 0.8) 0%, transparent 50%);
+            animation: bgMove 20s infinite alternate;
+        }
+
+        @keyframes bgMove {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        .header {
-            background: var(--light);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
+            padding: 2rem;
             position: relative;
+            z-index: 1;
         }
 
-        .header::before {
+        /* Night Sky Elements */
+        .night-sky {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 1.5s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .moon {
+            position: fixed;
+            top: 40px;
+            right: 80px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(145deg, #ffffff, #e3f2fd);
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            z-index: 0;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            padding: 3rem 0;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3),
+                         0 0 20px rgba(255,255,255,0.2);
+            background: linear-gradient(45deg, #ffffff, #e3f2fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleGlow 2s infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 20px rgba(255,255,255,0.5); }
+            to { text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #e3f2fd;
+            margin-bottom: 2rem;
+        }
+
+        /* Menu Section Styles */
+        .menu-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-section::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                rgba(255,255,255,0.1) 0%, 
+                rgba(255,255,255,0) 100%);
+            pointer-events: none;
         }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo i {
-            font-size: 2rem;
-            color: var(--primary);
-        }
-
-        .logo h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: var(--transition);
-            font-size: 0.9rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--light);
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: var(--light);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .menu-section {
-            margin-bottom: 40px;
+        .menu-section:hover {
+            transform: translateY(-5px);
         }
 
         .menu-section h2 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--dark);
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 10px;
-        }
-
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .menu-item {
-            background: var(--light);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .menu-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .menu-content {
-            padding: 20px;
-        }
-
-        .menu-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--dark);
-        }
-
-        .menu-price {
-            color: var(--primary);
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-        }
-
-        .menu-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .admin-panel {
-            background: var(--light);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-            display: none;
-        }
-
-        .admin-controls {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: var(--light);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            width: 100%;
-            max-width: 500px;
-            box-shadow: var(--shadow);
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
             position: relative;
+            padding-bottom: 15px;
         }
 
-        .modal-header {
+        .menu-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: linear-gradient(to right, 
+                transparent, 
+                rgba(255,255,255,0.8), 
+                transparent);
+        }
+
+        /* Menu Item Styles */
+        .menu-item {
+            background: var(--item-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
         }
 
-        .modal-title {
-            font-size: 1.5rem;
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item:hover {
+            transform: translateX(10px);
+            background: var(--hover-bg);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .item-details {
+            flex: 1;
+            padding-right: 2rem;
+        }
+
+        .item-name {
+            font-size: 1.3rem;
             font-weight: 600;
-            color: var(--dark);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--dark);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--gray);
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
-        }
-
-        .form-actions {
+            margin-bottom: 0.5rem;
             display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.8);
-            display: flex;
-            justify-content: center;
             align-items: center;
-            z-index: 2000;
+            gap: 10px;
         }
 
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid var(--gray);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .item-name i {
+            color: #ffd700;
+            font-size: 1.2rem;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .item-description {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.5;
         }
 
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .logo {
-                justify-content: center;
-            }
-
-            .admin-controls {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .menu-actions {
-                flex-direction: column;
-            }
+        .item-price {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 15px;
+            min-width: 120px;
+            text-align: center;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .price-variant {
+            display: block;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+            margin: 5px 0;
         }
 
-        .fade-in {
-            animation: fadeIn 0.3s ease forwards;
-        }
-
-        .status-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 5px 10px;
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
             border-radius: 20px;
             font-size: 0.8rem;
-            font-weight: 500;
-            background: var(--success);
-            color: var(--light);
+            margin-left: 10px;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .badge.popular {
+            background: linear-gradient(45deg, #ff6b6b, #ff8787);
+        }
+
+        .badge.new {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+        }
+
+        /* Category Icons */
+        .category-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+            vertical-align: middle;
+            color: #ffd700;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 3rem;
+            }
+
+            .menu-section {
+                padding: 1.5rem;
+            }
+
+            .menu-item {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+            }
+
+            .item-details {
+                padding-right: 0;
+                margin-bottom: 1rem;
+            }
+
+            .item-name {
+                justify-content: center;
+            }
+
+            .item-price {
+                width: 100%;
+            }
+
+            .moon {
+                width: 60px;
+                height: 60px;
+                top: 20px;
+                right: 20px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.4);
         }
     </style>
 </head>
 <body>
+    <div class="bg-animation"></div>
+    <div class="night-sky"></div>
+    <div class="moon"></div>
+    
     <div class="container">
-        <header class="header">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-utensils"></i>
-                    <h1>Menu Wayung Penowl</h1>
-                </div>
-                <button id="adminLoginBtn" class="btn btn-primary">
-                    <i class="fas fa-user-lock"></i>
-                    Admin Login
-                </button>
-            </div>
-        </header>
+        <div class="header">
+            <h1>Menu Cafe</h1>
+            <p>Nikmati hidangan spesial kami</p>
+        </div>
 
-        <div id="adminPanel" class="admin-panel">
-            <div class="admin-controls">
-                <button onclick="showAddModal()" class="btn btn-primary">
-                    <i class="fas fa-plus"></i>
-                    Tambah Menu
-                </button>
-                <button onclick="confirmReset()" class="btn btn-danger">
-                    <i class="fas fa-sync-alt"></i>
-                    Reset Menu
-                </button>
-                <button onclick="handleLogout()" class="btn btn-danger">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Logout
-                </button>
+        <!-- Menu Makanan -->
+        <div class="menu-section">
+            <h2><i class="fas fa-utensils category-icon"></i>Makanan</h2>
+            <div class="menu-items">
+                <!-- Indomie -->
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">
+                            <i class="fas fa-star"></i>
+                            Indomie
+                            <span class="badge popular">Favorit</span>
+                        </div>
+                        <div class="item-description">
+                            Pilihan varian: Mie Goreng, Rendang, Hype Abis, Kari Ayam, Soto
+                        </div>
+                    </div>
+                    <div class="item-price">Rp 6.000</div>
+                </div>
+
+                <!-- Mie Sakura -->
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">
+                            <i class="fas fa-award"></i>
+                            Mie Sakura
+                        </div>
+                        <div class="item-description">
+                            Mie dengan cita rasa istimewa
+                        </div>
+                    </div>
+                    <div class="item-price">Rp 4.000</div>
+                </div>
+
+                <!-- Mie Gelas -->
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">
+                            <i class="fas fa-fire"></i>
+                            Mie Gelas
+                            <span class="badge new">Baru</span>
+                        </div>
+                        <div class="item-description">
+                            Pilihan varian: Kari Ayam, Sop Buntut
+                        </div>
+                    </div>
+                    <div class="item-price">Rp 2.500</div>
+                </div>
             </div>
         </div>
 
-        <div class="menu-section" id="foodSection">
-            <h2>Makanan</h2>
-            <div class="menu-grid" id="foodGrid">
-                <!-- Food items will be rendered here -->
-            </div>
-        </div>
+        <!-- Menu Minuman -->
+        <div class="menu-section">
+            <h2><i class="fas fa-coffee category-icon"></i>Minuman</h2>
+            <div class="menu-items">
+                <!-- Teajus -->
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">
+                            <i class="fas fa-leaf"></i>
+                            Teajus
+                        </div>
+                        <div class="item-description">
+                            Pilihan varian: Gula Batu, Melati, Apel
+                        </div>
+                    </div>
+                    <div class="item-price">Rp 2.000</div>
+                </div>
 
-        <div class="menu-section" id="beverageSection">
-            <h2>Minuman</h2>
-            <div class="menu-grid" id="beverageGrid">
-                <!-- Beverage items will be rendered here -->
-            </div>
-        </div>
-    </div>
+                <!-- Jasjus -->
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">
+                            <i class="fas fa-glass-cheers"></i>
+                            Jasjus
+                            <span class="badge popular">Bestseller</span>
+                        </div>
+                        <div class="item-description">
+                            Pilihan varian: Jeruk Nipis, Jeruk Peras, Jambu, Anggur, Leci, Mangga
+                        </div>
+                    </div>
+                    <div class="item-price">Rp 2.000</div>
+                </div>
 
-    <div id="menuModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle">Tambah Menu</h2>
-                <button class="btn" onclick="closeModal()">
-                    <i class="fas fa-times"></i>
-                </button>
+                <!-- Nutrisari -->
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">
+                            <i class="fas fa-glass-martini-alt"></i>
+                            Nutrisari
+                        </div>
+                        <div class="item-description">
+                            Pilihan varian: Jeruk Nipis, Blewah, Sweet Orange, Jeruk Peras
+                        </div>
+                    </div>
+                    <div class="item-price">Rp 5.000</div>
+                </div>
+
+                <!-- Kopi -->
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">
+                            <i class="fas fa-mug-hot"></i>
+                            Kopi
+                            <span class="badge">Classic</span>
+                        </div>
+                        <div class="item-description">
+                            Pilihan varian: ABC, Kapal Api, Indocafe, Liong
+                        </div>
+                    </div>
+                    <div class="item-price">
+                        <span class="price-variant">Panas: Rp 4.000</span>
+                        <span class="price-variant">Dingin: Rp 5.000</span>
+                    </div>
+                </div>
+
+                <!-- GoodDay Mocacinno -->
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">
+                            <i class="fas fa-coffee"></i>
+                            GoodDay Mocacinno
+                        </div>
+                        <div class="item-description">
+                            Kopi dengan sentuhan mocha yang lezat
+                        </div>
+                    </div>
+                    <div class="item-price">
+                        <span class="price-variant">Panas: Rp 4.000</span>
+                        <span class="price-variant">Dingin: Rp 5.000</span>
+                    </div>
+                </div>
+
+                <!-- GoodDay Cappucino -->
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">
+                            <i class="fas fa-coffee"></i>
+                            GoodDay Cappucino
+                            <span class="badge popular">Favorit</span>
+                        </div>
+                        <div class="item-description">
+                            Cappucino dengan cita rasa premium
+                        </div>
+                    </div>
+                    <div class="item-price">
+                        <span class="price-variant">Panas: Rp 5.000</span>
+                        <span class="price-variant">Dingin: Rp 6.000</span>
+                    </div>
+                </div>
+
+                <!-- Milo -->
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">
+                            <i class="fas fa-mug-hot"></i>
+                            Milo
+                            <span class="badge popular">Favorit</span>
+                        </div>
+                        <div class="item-description">
+                            Cokelat malt yang nikmat
+                        </div>
+                    </div>
+                    <div class="item-price">
+                        <span class="price-variant">Panas: Rp 6.000</span>
+                        <span class="price-variant">Dingin: Rp 7.000</span>
+                    </div>
+                </div>
+
+                <!-- Susu Kental Manis -->
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">
+                            <i class="fas fa-glass-whiskey"></i>
+                            Susu Kental Manis
+                        </div>
+                        <div class="item-description">
+                            Susu kental manis yang creamy
+                        </div>
+                    </div>
+                    <div class="item-price">
+                        <span class="price-variant">Panas: Rp 3.000</span>
+                        <span class="price-variant">Dingin: Rp 4.000</span>
+                    </div>
+                </div>
             </div>
-            <form id="menuForm" onsubmit="handleSubmit(event)">
-                <div class="form-group">
-                    <label class="form-label" for="menuName">Nama Menu</label>
-                    <input type="text" id="menuName" class="form-control" required minlength="3">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="menuPrice">Harga (Rp)</label>
-                    <input type="number" id="menuPrice" class="form-control" required min="1000">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="menuCategory">Kategori</label>
-                    <select id="menuCategory" class="form-control" required>
-                        <option value="food">Makanan</option>
-                        <option value="beverage">Minuman</option>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn" onclick="closeModal()">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
         </div>
     </div>
 
     <script>
-        let state = {
-            menu: [],
-            isAdmin: false,
-            editingId: null
-        };
-
-        function init() {
-            checkAdminStatus();
-            loadMenuData();
-            renderMenu();
-        }
-
-        function checkAdminStatus() {
-            const isAdmin = localStorage.getItem('isAdmin') === 'true';
-            state.isAdmin = isAdmin;
-            updateAdminUI();
-        }
-
-        function updateAdminUI() {
-            const adminPanel = document.getElementById('adminPanel');
-            const adminLoginBtn = document.getElementById('adminLoginBtn');
+        // Create star field
+        function createStars() {
+            const nightSky = document.querySelector('.night-sky');
+            const starCount = 100;
             
-            if (state.isAdmin) {
-                adminPanel.style.display = 'block';
-                adminLoginBtn.style.display = 'none';
-            } else {
-                adminPanel.style.display = 'none';
-                adminLoginBtn.style.display = 'block';
-            }
-            renderMenu();
-        }
-
-        function loadMenuData() {
-            try {
-                const savedMenu = localStorage.getItem('menuData');
-                if (savedMenu) {
-                    state.menu = JSON.parse(savedMenu);
-                } else {
-                    state.menu = [
-                        { id: 1, name: 'Nasi Goreng Spesial', price: 15000, category: 'food' },
-                        { id: 2, name: 'Mie Goreng Spesial', price: 12000, category: 'food' },
-                        { id: 3, name: 'Es Teh Manis', price: 3000, category: 'beverage' }
-                    ];
-                    saveMenuData();
-                }
-            } catch (error) {
-                console.error('Error loading menu data:', error);
-                showAlert('Error', 'Gagal memuat data menu', 'error');
-                state.menu = [];
+            for(let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                nightSky.appendChild(star);
             }
         }
 
-        function saveMenuData() {
-            try {
-                localStorage.setItem('menuData', JSON.stringify(state.menu));
-            } catch (error) {
-                console.error('Error saving menu data:', error);
-                showAlert('Error', 'Gagal menyimpan data menu', 'error');
-            }
-        }
-
-        function renderMenu() {
-            const foodGrid = document.getElementById('foodGrid');
-            const beverageGrid = document.getElementById('beverageGrid');
-
-            const foodItems = state.menu.filter(item => item.category === 'food');
-            const beverageItems = state.menu.filter(item => item.category === 'beverage');
-
-            foodGrid.innerHTML = foodItems.map(item => `
-                <div class="menu-item fade-in">
-                    <div class="menu-content">
-                        <h3 class="menu-name">${item.name}</h3>
-                        <p class="menu-price">Rp ${item.price.toLocaleString()}</p>
-                        ${state.isAdmin ? `
-                            <div class="menu-actions">
-                                <button onclick="editMenu(${item.id})" class="btn btn-primary">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button onclick="deleteMenu(${item.id})" class="btn btn-danger">
-                                    <i class="fas fa-trash"></i> Hapus
-                                </button>
-                            </div>
-                        ` : ''}
-                    </div>
-                </div>
-            `).join('');
-
-            beverageGrid.innerHTML = beverageItems.map(item => `
-                <div class="menu-item fade-in">
-                    <div class="menu-content">
-                        <h3 class="menu-name">${item.name}</h3>
-                        <p class="menu-price">Rp ${item.price.toLocaleString()}</p>
-                        ${state.isAdmin ? `
-                            <div class="menu-actions">
-                                <button onclick="editMenu(${item.id})" class="btn btn-primary">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button onclick="deleteMenu(${item.id})" class="btn btn-danger">
-                                    <i class="fas fa-trash"></i> Hapus
-                                </button>
-                            </div>
-                        ` : ''}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function editMenu(id) {
-            const item = state.menu.find(item => item.id === id);
-            if (item) {
-                showEditModal(item);
-            }
-        }
-
-        function showAddModal() {
-            state.editingId = null;
-            document.getElementById('modalTitle').textContent = 'Tambah Menu';
-            document.getElementById('menuForm').reset();
-            document.getElementById('menuModal').style.display = 'flex';
-        }
-
-        function showEditModal(item) {
-            state.editingId = item.id;
-            document.getElementById('modalTitle').textContent = 'Edit Menu';
-            document.getElementById('menuName').value = item.name;
-            document.getElementById('menuPrice').value = item.price;
-            document.getElementById('menuCategory').value = item.category;
-            document.getElementById('menuModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('menuModal').style.display = 'none';
-            document.getElementById('menuForm').reset();
-        }
-
-        function handleSubmit(event) {
-            event.preventDefault();
-            
-            const name = document.getElementById('menuName').value.trim();
-            const price = parseInt(document.getElementById('menuPrice').value);
-            const category = document.getElementById('menuCategory').value;
-
-            if (name.length < 3) {
-                showAlert('Error', 'Nama menu minimal 3 karakter', 'error');
-                return;
-            }
-
-            if (price < 1000) {
-                showAlert('Error', 'Harga minimal Rp 1.000', 'error');
-                return;
-            }
-
-            if (state.editingId) {
-                updateMenu(state.editingId, { name, price, category });
-            } else {
-                addMenu({ name, price, category });
-            }
-            
-            closeModal();
-        }
-
-        function addMenu(data) {
-            const newId = Math.max(0, ...state.menu.map(item => item.id)) + 1;
-            state.menu.push({ id: newId, ...data });
-            saveMenuData();
-            renderMenu();
-            showAlert('Success', 'Menu berhasil ditambahkan', 'success');
-        }
-
-        function updateMenu(id, data) {
-            const index = state.menu.findIndex(item => item.id === id);
-            if (index !== -1) {
-                state.menu[index] = { ...state.menu[index], ...data };
-                saveMenuData();
-                renderMenu();
-                showAlert('Success', 'Menu berhasil diperbarui', 'success');
-            }
-        }
-
-        function deleteMenu(id) {
-            Swal.fire({
-                title: 'Konfirmasi',
-                text: 'Apakah Anda yakin ingin menghapus menu ini?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Hapus',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#ff7675',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    state.menu = state.menu.filter(item => item.id !== id);
-                    saveMenuData();
-                    renderMenu();
-                    showAlert('Success', 'Menu berhasil dihapus', 'success');
-                }
+        // Add animation delay to menu items
+        function addMenuAnimations() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.1}s`;
             });
         }
 
-        function confirmReset() {
-            Swal.fire({
-                title: 'Reset Menu',
-                text: 'Apakah Anda yakin ingin mereset semua menu?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Reset',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#ff7675',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    localStorage.removeItem('menuData');
-                    loadMenuData();
-                    renderMenu();
-                    showAlert('Success', 'Menu berhasil direset', 'success');
-                }
-            });
-        }
-
-        function handleLogout() {
-            Swal.fire({
-                title: 'Konfirmasi Logout',
-                text: 'Apakah Anda yakin ingin keluar?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Keluar',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#ff7675',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    state.isAdmin = false;
-                    localStorage.setItem('isAdmin', 'false');
-                    updateAdminUI();
-                    showAlert('Success', 'Berhasil logout', 'success');
-                }
-            });
-        }
-
-        function showAlert(title, text, icon) {
-            Swal.fire({
-                title,
-                text,
-                icon,
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true
-            });
-        }
-
-        document.getElementById('adminLoginBtn').addEventListener('click', () => {
-            Swal.fire({
-                title: 'Admin Login',
-                input: 'password',
-                inputPlaceholder: 'Masukkan password',
-                inputAttributes: {
-                    autocapitalize: 'off',
-                    autocorrect: 'off'
-                },
-                showCancelButton: true,
-                confirmButtonText: 'Login',
-                cancelButtonText: 'Batal',
-                showLoaderOnConfirm: true,
-                preConfirm: (password) => {
-                    return new Promise((resolve) => {
-                        setTimeout(() => {
-                            if (password === 'penowl08') {
-                                resolve(true);
-                            } else {
-                                Swal.showValidationMessage('Password salah!');
-                                resolve(false);
-                            }
-                        }, 500);
-                    });
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    state.isAdmin = true;
-                    localStorage.setItem('isAdmin', 'true');
-                    updateAdminUI();
-                    showAlert('Success', 'Login berhasil', 'success');
-                }
-            });
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            addMenuAnimations();
         });
-
-        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
